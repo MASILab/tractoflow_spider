@@ -186,7 +186,6 @@ command: >-
   run
   --contain
   -e
-  -B /tmp:/TMP
   -B $INDIR:/INPUTS
   -B $OUTDIR:/OUTPUTS
   {container_path}
