@@ -64,4 +64,9 @@ cp -L results/*/*/*__ad.nii.gz results/*/*/*__rd.nii.gz results/*/*/*__fa.nii.gz
 cp -L results/*/*/*__tensor.nii.gz results/*/*/*__evecs_v1.nii.gz results/*/*/*__evals_e1.nii.gz ${OUT_DIR}/
 cp -L results/*/*/*__afd_max.nii.gz results/*/*/*__afd_sum.nii.gz results/*/*/*__afd_total.nii.gz results/*/*/*__nufo.nii.gz ${OUT_DIR}/
 cp -L results/*/*/*__peaks.nii.gz results/*/*/*__fodf.nii.gz ${OUT_DIR}/
-cp -L results/*/Local_Tracking/*.trk results/*/PFT_Tracking/*.trk ${OUT_DIR}/
+
+# This facilitate usage if data is downloaded and used with other tools (Dipy/Scilpy)
+BASE_NAME=$(basename results/*/PFT_Tracking/*.trk)
+scil_remove_invalid_streamlines.py results/*/PFT_Tracking/*.trk ${OUT_DIR}/${BASE_NAME} --cut_invalid --remove_single_point --remove_overlapping_points
+BASE_NAME=$(basename results/*/Local_Tracking/*.trk)
+scil_remove_invalid_streamlines.py results/*/Local_Tracking/*.trk ${OUT_DIR}/${BASE_NAME} --cut_invalid --remove_single_point --remove_overlapping_points
