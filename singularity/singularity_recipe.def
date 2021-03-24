@@ -12,8 +12,9 @@ From: scilus/singularity-base-tractoflow
     git clone https://github.com/scilus/tractoflow.git $SINGULARITY_ROOTFS/tractoflow/
     cd $SINGULARITY_ROOTFS/tractoflow/
     git checkout e4db6fc
-	sed -i 's/cpus 2/cpus 1/g' $SINGULARITY_ROOTFS/tractoflow/main.nf 
+    sed -i 's/cpus 2/cpus 1/g' $SINGULARITY_ROOTFS/tractoflow/main.nf 
     sed -i 's/cpus 3/cpus 1/g' $SINGULARITY_ROOTFS/tractoflow/main.nf
+    sed -i 's/scratch = true/scratch = false/g' $SINGULARITY_ROOTFS/tractoflow/nextflow.config
 
 %post
     apt-get update
@@ -45,7 +46,7 @@ From: scilus/singularity-base-tractoflow
     python3.7 get-pip.py
     pip install fpdf
     pip install numpy==1.18.* --no-binary numpy
-    pip install -e git://github.com/frheault/scilpy.git@8783720#egg=scilpy
+    pip install -e git://github.com/scilus/scilpy.git@e7b272e#egg=scilpy
     sed -i '41s/.*/backend : Agg/' /usr/local/lib/python3.7/dist-packages/matplotlib/mpl-data/matplotlibrc
 
     wget https://github.com/nextflow-io/nextflow/releases/download/v19.04.0/nextflow-19.04.0-all
@@ -55,6 +56,7 @@ From: scilus/singularity-base-tractoflow
     # Make custom folders
     mkdir -p /INPUTS && chmod 755 /INPUTS 
     mkdir -p /OUTPUTS && chmod 775 /OUTPUTS
+    mkdir -p /TMP && chmod 775 /TMP
 	
 %runscript
     xvfb-run -a --server-num=$((65536+$$)) --server-args="-screen 0 1600x1280x24 -ac" bash /CODE/launch_tractoflow_wrapper.sh /INPUTS /OUTPUTS "$@"

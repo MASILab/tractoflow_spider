@@ -9,10 +9,8 @@ inputs:
     sh_order: 8
     dti_shells: "0 1000"
     fodf_shells: "0 1000"
-    run_pft: true
     pft_seed: 30
     pft_mask_type: wm
-    run_local: true
     local_seed: 10
     local_mask_type: wm
     algo: prob
@@ -79,6 +77,12 @@ outputs:
     type: FILE
     resource: DWI_FILES
   - path: '*__dwi_resampled.nii.gz'
+    type: FILE
+    resource: DWI_FILES
+  - path: '*__dwi.bval'
+    type: FILE
+    resource: DWI_FILES
+  - path: '*__dwi.bvec'
     type: FILE
     resource: DWI_FILES
   - path: '*__output0GenericAffine.mat'
@@ -184,20 +188,20 @@ outputs:
 command: >-
   singularity 
   run
-  --contain
-  -e
-  -B $INDIR:/INPUTS
-  -B $OUTDIR:/OUTPUTS
+  --home $TMP
+  --containall
+  --cleanenv
+  --bind $INDIR:/INPUTS
+  --bind  $OUTDIR:/OUTPUTS
+  --bind $TMP:/TMP
   {container_path}
   {subject}
   {session}
   {sh_order}
   {dti_shells}
   {fodf_shells}
-  {run_pft}
   {pft_seed}
   {pft_mask_type}
-  {run_local}
   {local_seed}
   {local_mask_type}
   {algo}

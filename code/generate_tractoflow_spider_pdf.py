@@ -28,7 +28,9 @@ def parse_report(filename):
             tmp = tmp.replace('</code></pre></dd>', '').strip()
             final.append(tmp)
         elif 'Workflow execution' in line:
-            final.append(lines[i].strip())
+            tmp = lines[i].strip().replace('</h4>', '')
+            tmp = tmp.replace('<h4>', '')
+            final.append(tmp)
 
     return final
 
