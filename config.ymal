@@ -197,6 +197,10 @@ command: >-
   {container_path}
   {subject}
   {session}
+  t1.nii.gz
+  dwi.nii.gz
+  dwi.bval
+  dwi.bvec
   {sh_order}
   {dti_shells}
   {fodf_shells}

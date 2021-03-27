@@ -3,6 +3,7 @@
 
 from fpdf import FPDF
 import sys
+import os
 
 
 def parse_report(filename):
@@ -121,14 +122,18 @@ pdf.add_cell_left('Duration:', html_info[4], size_y=5)
 pdf.add_cell_left('Methods:', METHODS, size_y=5)
 pdf.add_cell_left('References:', REFERENCES, size_y=5)
 
-pdf.add_page()
-pdf.titles('Tractoflow_V1: {}'.format(sys.argv[1]))
-pdf.add_mosaic('Whole Brain Tractography',
-               ['Local Tracking', 'PFT Tracking'],
-               ['local.png', 'pft.png'],
-               size_x=40, size_y=220, row=1, col=2, pos_x=10, pos_y=40)
-pdf.add_image('FODF axial', 'axial.png', size_x=100, size_y=100,
-              pos_x=100, pos_y=40)
-pdf.add_image('FODF coronal', 'coronal.png', size_x=100, size_y=100,
-              pos_x=100, pos_y=150)
+if (os.path.isfile('local.png') and os.path.isfile('pft.png')) or \
+    (os.path.isfile('axial.png') and os.path.isfile('coronal.png')):
+    pdf.add_page()
+    pdf.titles('Tractoflow_V1: {}'.format(sys.argv[1]))
+    if os.path.isfile('local.png') and os.path.isfile('pft.png'):
+        pdf.add_mosaic('Whole Brain Tractography',
+                    ['Local Tracking', 'PFT Tracking'],
+                    ['local.png', 'pft.png'],
+                    size_x=40, size_y=220, row=1, col=2, pos_x=10, pos_y=40)
+    if os.path.isfile('axial.png') and os.path.isfile('coronal.png'):
+        pdf.add_image('FODF axial', 'axial.png', size_x=100, size_y=100,
+                    pos_x=100, pos_y=40)
+        pdf.add_image('FODF coronal', 'coronal.png', size_x=100, size_y=100,
+                    pos_x=100, pos_y=150)
 pdf.output('report.pdf', 'F')
