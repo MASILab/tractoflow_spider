@@ -12,7 +12,10 @@ IN_BVEC=${8}
 
 cd /TMP/
 mkdir raw/${N_SUBJ}_${N_SESS} -p
-cp ${IN_DIR}/${IN_T1} ${IN_DIR}/${IN_DWI} ${IN_DIR}/${IN_BVAL} ${IN_DIR}/${IN_BVEC} raw/${N_SUBJ}_${N_SESS}/
+cp ${IN_DIR}/${IN_T1} raw/${N_SUBJ}_${N_SESS}/t1.nii.gz
+cp ${IN_DIR}/${IN_DWI} raw/${N_SUBJ}_${N_SESS}/dwi.nii.gz
+cp ${IN_DIR}/${IN_BVAL} raw/${N_SUBJ}_${N_SESS}/bval
+cp ${IN_DIR}/${IN_BVEC} raw/${N_SUBJ}_${N_SESS}/bvec
 
 # Relevant parameters for Tractoflow
 SH_ORDER=${9}
