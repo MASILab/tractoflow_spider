@@ -37,17 +37,15 @@ ALGO=${16}
 	-resume -with-report report.html
 
 # This facilitate usage if data is downloaded and used with other tools (Dipy/Scilpy)
-BASE_NAME=$(basename results/*/PFT_Tracking/*.trk)
-scil_remove_invalid_streamlines.py results/*/PFT_Tracking/*.trk ${OUT_DIR}/${BASE_NAME} --cut_invalid --remove_single_point --remove_overlapping_points
+scil_remove_invalid_streamlines.py results/*/PFT_Tracking/*.trk ${OUT_DIR}/${N_SUBJ}_${N_SESS}__pft.trk --cut_invalid --remove_single_point --remove_overlapping_points
 xvfb-run -a --server-num=$((65536+$$)) --server-args="-screen 0 1600x1280x24 -ac" \
 	scil_visualize_bundles_mosaic.py results/*/DTI_Metrics/*__fa.nii.gz \
-	${OUT_DIR}/${BASE_NAME} pft.png --resolution_of_thumbnails 600 --opacity_background 0.5 -f --zoom 1.5
+	${OUT_DIR}/${N_SUBJ}_${N_SESS}__pft.trk pft.png --resolution_of_thumbnails 600 --opacity_background 0.5 -f --zoom 1.5
 
-BASE_NAME=$(basename results/*/Local_Tracking/*.trk)
-scil_remove_invalid_streamlines.py results/*/Local_Tracking/*.trk ${OUT_DIR}/${BASE_NAME} --cut_invalid --remove_single_point --remove_overlapping_points
+scil_remove_invalid_streamlines.py results/*/Local_Tracking/*.trk ${OUT_DIR}/${N_SUBJ}_${N_SESS}__local.trk --cut_invalid --remove_single_point --remove_overlapping_points
 xvfb-run -a --server-num=$((65536+$$)) --server-args="-screen 0 1600x1280x24 -ac" \
 	scil_visualize_bundles_mosaic.py results/*/DTI_Metrics/*__fa.nii.gz \
-	${OUT_DIR}/${BASE_NAME} local.png --resolution_of_thumbnails 600 --opacity_background 0.5 -f --zoom 1.5
+	${OUT_DIR}/${N_SUBJ}_${N_SESS}__pft.trk local.png --resolution_of_thumbnails 600 --opacity_background 0.5 -f --zoom 1.5
 
 convert pft.png -crop 600x3600+600+0 pft.png
 convert local.png -crop 600x3600+600+0 local.png

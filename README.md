@@ -100,8 +100,8 @@ See https://tractoflow-documentation.readthedocs.io/en/latest/index.html and [1]
 - pft_seeding_mask.nii.gz
 
 **Tracking**
-- local_tracking_*.trk
-- pft_tracking_*.trk
+- local.trk
+- pft.trk
 
 ### Input assumptions and parameters choice
 
