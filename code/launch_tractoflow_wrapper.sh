@@ -37,15 +37,15 @@ ALGO=${16}
 	-resume -with-report report.html
 
 # This facilitate usage if data is downloaded and used with other tools (Dipy/Scilpy)
-scil_remove_invalid_streamlines.py results/*/PFT_Tracking/*.trk ${OUT_DIR}/${N_SUBJ}_${N_SESS}__pft.trk --cut_invalid --remove_single_point --remove_overlapping_points
+scil_remove_invalid_streamlines.py results/*/PFT_Tracking/*.trk ${N_SUBJ}_${N_SESS}__pft.trk --cut_invalid --remove_single_point --remove_overlapping_points
 xvfb-run -a --server-num=$((65536+$$)) --server-args="-screen 0 1600x1280x24 -ac" \
 	scil_visualize_bundles_mosaic.py results/*/DTI_Metrics/*__fa.nii.gz \
-	${OUT_DIR}/${N_SUBJ}_${N_SESS}__pft.trk pft.png --resolution_of_thumbnails 600 --opacity_background 0.5 -f --zoom 1.5
+	${N_SUBJ}_${N_SESS}__pft.trk pft.png --resolution_of_thumbnails 600 --opacity_background 0.5 -f --zoom 1.5
 
-scil_remove_invalid_streamlines.py results/*/Local_Tracking/*.trk ${OUT_DIR}/${N_SUBJ}_${N_SESS}__local.trk --cut_invalid --remove_single_point --remove_overlapping_points
+scil_remove_invalid_streamlines.py results/*/Local_Tracking/*.trk ${N_SUBJ}_${N_SESS}__local.trk --cut_invalid --remove_single_point --remove_overlapping_points
 xvfb-run -a --server-num=$((65536+$$)) --server-args="-screen 0 1600x1280x24 -ac" \
 	scil_visualize_bundles_mosaic.py results/*/DTI_Metrics/*__fa.nii.gz \
-	${OUT_DIR}/${N_SUBJ}_${N_SESS}__pft.trk local.png --resolution_of_thumbnails 600 --opacity_background 0.5 -f --zoom 1.5
+	${N_SUBJ}_${N_SESS}__local.trk local.png --resolution_of_thumbnails 600 --opacity_background 0.5 -f --zoom 1.5
 
 convert pft.png -crop 600x3600+600+0 pft.png
 convert local.png -crop 600x3600+600+0 local.png
@@ -73,3 +73,4 @@ cp -L results/*/*/*__ad.nii.gz results/*/*/*__rd.nii.gz results/*/*/*__fa.nii.gz
 cp -L results/*/*/*__tensor.nii.gz results/*/*/*__evecs_v1.nii.gz results/*/*/*__evals_e1.nii.gz ${OUT_DIR}/
 cp -L results/*/*/*__afd_max.nii.gz results/*/*/*__afd_sum.nii.gz results/*/*/*__afd_total.nii.gz results/*/*/*__nufo.nii.gz ${OUT_DIR}/
 cp -L results/*/*/*__peaks.nii.gz results/*/*/*__fodf.nii.gz ${OUT_DIR}/
+scil_streamlines_math.py concatenate ${N_SUBJ}_${N_SESS}__pft.trk ${N_SUBJ}_${N_SESS}__local.trk ${OUT_DIR}/${N_SUBJ}_${N_SESS}__ensemble.trk

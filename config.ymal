@@ -175,10 +175,7 @@ outputs:
   - path: '*__fodf.nii.gz'
     type: FILE
     resource: FODF_METRICS
-  - path: '*__local.trk'
-    type: FILE
-    resource: DWI_TRK
-  - path: '*__pft.trk'
+  - path: '*__ensemble.trk'
     type: FILE
     resource: DWI_TRK
 
