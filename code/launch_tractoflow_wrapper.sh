@@ -1,6 +1,5 @@
 #!/bin/bash
 
-# Prepare input for Tractoflow
 IN_DIR=${1}
 OUT_DIR=${2}
 N_SUBJ=${3}
@@ -10,6 +9,7 @@ IN_DWI=${6}
 IN_BVAL=${7}
 IN_BVEC=${8}
 
+# Prepare input for Tractoflow
 cd /TMP/
 mkdir raw/${N_SUBJ}_${N_SESS} -p
 cp ${IN_DIR}/${IN_T1} raw/${N_SUBJ}_${N_SESS}/t1.nii.gz
@@ -27,6 +27,7 @@ LOCAL_SEED=${14}
 LOCAL_MASK_TYPE=${15}
 ALGO=${16}
 
+# Launch pipeline
 /nextflow /tractoflow/main.nf \
 	--input raw/ --dti_shells "${DTI_SHELLS}" --fodf_shells "${FODF_SHELLS}" --run_dwi_denoising false --run_topup false \
 	--run_eddy false --use_slice_drop_correction false --mean_frf false --sh_order ${SH_ORDER} --run_pft_tracking true \
@@ -36,7 +37,8 @@ ALGO=${16}
 	--processes_eddy 1 --processes_fodf 1 --processes 1 --processes_brain_extraction_t1 1 --processes_registration 1 \
 	-resume -with-report report.html
 
-# This facilitate usage if data is downloaded and used with other tools (Dipy/Scilpy)
+# scil_remove_invalid_streamlines.py facilitate usage if data is downloaded and used with other tools (Dipy/Scilpy)
+# Screenshot the tracking for QA
 scil_remove_invalid_streamlines.py results/*/PFT_Tracking/*.trk ${N_SUBJ}_${N_SESS}__pft.trk --cut_invalid --remove_single_point --remove_overlapping_points
 xvfb-run -a --server-num=$((65536+$$)) --server-args="-screen 0 1600x1280x24 -ac" \
 	scil_visualize_bundles_mosaic.py results/*/DTI_Metrics/*__fa.nii.gz \
@@ -50,6 +52,7 @@ xvfb-run -a --server-num=$((65536+$$)) --server-args="-screen 0 1600x1280x24 -ac
 convert pft.png -crop 600x3600+600+0 pft.png
 convert local.png -crop 600x3600+600+0 local.png
 
+# Screenshot FODF in two views for QA
 xvfb-run -a --server-num=$((65536+$$)) --server-args="-screen 0 1600x1280x24 -ac" \
 	scil_visualize_fodf.py results/*/FODF_Metrics/*__fodf.nii.gz --axis_name axial --output axial.png --silent \
 	--background results/*/DTI_Metrics/*__fa.nii.gz --win_dims 2560 2560
@@ -57,8 +60,10 @@ xvfb-run -a --server-num=$((65536+$$)) --server-args="-screen 0 1600x1280x24 -ac
 	scil_visualize_fodf.py results/*/FODF_Metrics/*__fodf.nii.gz --axis_name coronal --output coronal.png --silent \
 	--background results/*/DTI_Metrics/*__fa.nii.gz --win_dims 2560 2560
 
+# Generate PDF
 python3.7 /CODE/generate_tractoflow_spider_pdf.py ${N_SUBJ}_${N_SESS} 
 
+# Copy relevant outputs
 cp report.pdf report.html results/*/readme.txt ${OUT_DIR}/
 cp -L results/*/*/*__b0_resampled.nii.gz results/*/*/*__b0_mask_resampled.nii.gz results/*/*/*__dwi_resampled.nii.gz ${OUT_DIR}/
 cp -L results/*/*/*__bval_eddy ${OUT_DIR}/${N_SUBJ}_${N_SESS}__dwi.bval
