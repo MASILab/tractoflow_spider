@@ -9,7 +9,7 @@ inputs:
     sh_order: 8
     dti_shells: \"0 1000\"
     fodf_shells: \"0 1000\"
-    pft_seed: 30
+    pft_seed: 10
     pft_mask_type: wm
     local_seed: 10
     local_mask_type: wm

@@ -31,11 +31,10 @@ ALGO=${16}
 /nextflow /tractoflow/main.nf \
 	--input raw/ --dti_shells "${DTI_SHELLS}" --fodf_shells "${FODF_SHELLS}" --run_dwi_denoising false --run_topup false \
 	--run_eddy false --use_slice_drop_correction false --mean_frf false --sh_order ${SH_ORDER} --run_pft_tracking true \
-	--pft_algo ${ALGO} --pft_seeding_mask_type ${PFT_MASK_TYPE} \
-	--pft_seeding_mask_type interface --pft_nbr_seeds ${PFT_SEED} --run_local_tracking true --local_algo ${ALGO} \
-	--local_tracking_mask_type ${LOCAL_MASK_TYPE} --local_nbr_seeds ${LOCAL_SEED} --processes_denoise_dwi 1 --processes_denoise_t1 1 \
-	--processes_eddy 1 --processes_fodf 1 --processes 1 --processes_brain_extraction_t1 1 --processes_registration 1 \
-	-resume -with-report report.html
+	--pft_algo ${ALGO} --pft_seeding_mask_type ${PFT_MASK_TYPE} --pft_nbr_seeds ${PFT_SEED} --run_local_tracking true \
+	--local_algo ${ALGO} --local_tracking_mask_type ${LOCAL_MASK_TYPE} --local_nbr_seeds ${LOCAL_SEED} --processes_denoise_dwi 1 \
+	--processes_denoise_t1 1 --processes_eddy 1 --processes_fodf 1 --processes 1 --processes_brain_extraction_t1 1 \
+	--processes_registration 1 -resume -with-report report.html
 
 # scil_remove_invalid_streamlines.py facilitate usage if data is downloaded and used with other tools (Dipy/Scilpy)
 # Screenshot the tracking for QA
