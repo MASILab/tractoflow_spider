@@ -4,6 +4,7 @@
 from fpdf import FPDF
 import sys
 import os
+import nibabel as nib
 
 
 def parse_report(filename):
@@ -127,8 +128,11 @@ if (os.path.isfile('local.png') and os.path.isfile('pft.png')) or \
     pdf.add_page()
     pdf.titles('Tractoflow_V1: {}'.format(sys.argv[1]))
     if os.path.isfile('local.png') and os.path.isfile('pft.png'):
+        in_local = nib.streamlines.load('{}__local.trk'.format(sys.argv[1]), lazy_load=True)
+        in_pft = nib.streamlines.load('{}__pft.trk'.format(sys.argv[1]), lazy_load=True)
         pdf.add_mosaic('Whole Brain Tractography',
-                    ['Local Tracking', 'PFT Tracking'],
+                    ['Local Tracking: {}'.format(in_local.header['nb_streamlines']),
+                    'PFT Tracking: {}'.format(in_pft.header['nb_streamlines'])],
                     ['local.png', 'pft.png'],
                     size_x=40, size_y=220, row=1, col=2, pos_x=10, pos_y=40)
     if os.path.isfile('axial.png') and os.path.isfile('coronal.png'):
