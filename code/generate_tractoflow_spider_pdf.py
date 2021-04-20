@@ -78,7 +78,7 @@ class PDF(FPDF):
         for i in range(row):
             for j in range(col):
                 self.set_xy(pos[0]+size_x*j, pos[1]+5+size_y*i)
-                self.set_font('Arial', '', 10)
+                self.set_font('Arial', '', 8)
                 self.multi_cell(size_x, 5, align='C', txt=titles[j+col*i])
                 self.image(filenames[j+col*i],
                            x=pos[0]+size_x*j, y=pos[1]+10+size_y*i,
@@ -124,20 +124,22 @@ pdf.add_cell_left('Methods:', METHODS, size_y=5)
 pdf.add_cell_left('References:', REFERENCES, size_y=5)
 
 if (os.path.isfile('local.png') and os.path.isfile('pft.png')) or \
-    (os.path.isfile('axial.png') and os.path.isfile('coronal.png')):
+        (os.path.isfile('axial.png') and os.path.isfile('coronal.png')):
     pdf.add_page()
     pdf.titles('Tractoflow_V1: {}'.format(sys.argv[1]))
     if os.path.isfile('local.png') and os.path.isfile('pft.png'):
-        in_local = nib.streamlines.load('{}__local.trk'.format(sys.argv[1]), lazy_load=True)
-        in_pft = nib.streamlines.load('{}__pft.trk'.format(sys.argv[1]), lazy_load=True)
+        in_local = nib.streamlines.load(
+            '{}__local.trk'.format(sys.argv[1]), lazy_load=True)
+        in_pft = nib.streamlines.load(
+            '{}__pft.trk'.format(sys.argv[1]), lazy_load=True)
         pdf.add_mosaic('Whole Brain Tractography',
-                    ['Local Tracking: {}'.format(in_local.header['nb_streamlines']),
-                    'PFT Tracking: {}'.format(in_pft.header['nb_streamlines'])],
-                    ['local.png', 'pft.png'],
-                    size_x=40, size_y=220, row=1, col=2, pos_x=10, pos_y=40)
+                       ['Local Tracking: {}'.format(in_local.header['nb_streamlines']),
+                        'PFT Tracking: {}'.format(in_pft.header['nb_streamlines'])],
+                       ['local.png', 'pft.png'],
+                       size_x=40, size_y=220, row=1, col=2, pos_x=10, pos_y=40)
     if os.path.isfile('axial.png') and os.path.isfile('coronal.png'):
         pdf.add_image('FODF axial', 'axial.png', size_x=100, size_y=100,
-                    pos_x=100, pos_y=40)
+                      pos_x=100, pos_y=40)
         pdf.add_image('FODF coronal', 'coronal.png', size_x=100, size_y=100,
-                    pos_x=100, pos_y=150)
+                      pos_x=100, pos_y=150)
 pdf.output('report.pdf', 'F')
