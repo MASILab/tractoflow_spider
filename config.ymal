@@ -204,7 +204,7 @@ command: >-
   {algo}
 attrs:
   xsitype: proc:genProcData
-  walltime: "48:00:00"
+  walltime: "72:00:00"
   memory: 16384
   ppn: 1
 
